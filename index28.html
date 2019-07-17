@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vue组件</title>
+	<script type="text/javascript" src="./vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+</head>
+<body>
+<div id="blog">
+	<div v-bind:style="{fontSize: postFontSize + 'em'}">
+	<!-- 使用v-bind来动态传递prop -->
+	<blog-post v-for="post in posts" v-bind:key="post.id" v-bind:post="post" v-on:enlarge-text="onEnlargeText">
+		 
+	</blog-post>
+	</div>
+</div>
+
+<script type="text/javascript">
+	Vue.component('blog-post', {
+		props: ['post'],
+		template: '<div class="blog-post">\
+		<h3>{{post.title}}</h3>\
+		<div v-html="post.content"></div>\
+		</div>'
+	})
+
+	new Vue({
+		el: "#blog",
+		data: {
+			posts: [
+               {id: 1, title: "雨霖铃-柳永", content: "杨柳岸，晓风残月。此去经年，应是良辰好景虚设。便纵有千种风情，更与何人说？"},
+               {id: 2, title: "将近酒-李白", content: "岑夫子，丹丘生，将进酒，杯莫停。"},
+               {id: 3, title: "虞美人-李煜", content: "剪不断，理还乱，是离愁，别是一般滋味在心头。"}
+			],
+			postFontSize: 1
+		},
+		methods: {
+			onEnlargeText: function(enlargeAmount){
+				this.postFontSize += enlargeAmount
+			}
+		}
+	})
+</script>
+</body>
+</html>

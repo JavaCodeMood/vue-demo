@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vue-绑定class与样式</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+	<!-- v-bind:class 绑定HTML class-->
+	<div v-bind:class="[activeClass, errorClass]">兴百姓苦</div>
+	<!-- v-bind:style 绑定CSS样式 -->
+	<div v-bind:style="{color: activeColor, fontSize: fontSize + 'px'}">亡百姓苦</div>
+</div>
+
+<script type="text/javascript">
+	new Vue({
+		el: "#app",
+		data: {
+			activeClass: 'active',
+			errorClass: 'text-danger',
+			activeColor: 'red',
+			fontSize: 30
+		}
+	})
+</script>
+</body>
+</html>

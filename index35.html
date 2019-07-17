@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>vue-自定义全局组件</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+	 <div v-demo="{ color: 'red', text: '文本' }">{{msg}}</div>
+</div>
+
+<script type="text/javascript">
+	//自定义全局指令
+	Vue.directive('demo', function (el, binding) {
+	  console.log(binding.value.color) 
+	  console.log(binding.value.text)  
+	})
+
+	new Vue({
+		el: "#app",
+		data: {
+			msg: "不信抬头看",
+			color: 'red'
+		}
+	})
+</script>
+</body>
+</html>

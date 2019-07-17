@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vue指令—— v-if,v-show,v-for</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="root">
+	<div style="color: red;font-size: 30px;" v-if="show">hello world</div>
+	<br>
+	<div style="color: green;font-size: 30px;" v-if="show">hello world</div>
+	<button style="width: 80px; height: 30px;" v-on:click="handleClick">toggle</button>
+
+	<br>
+	<ul>
+		<li v-for="item of list">{{item}}</li>
+	</ul>
+	<ul>
+		<!--  v-for=“item of list”，v-for表示循环list，依次输出item ，：key可以提升遍历效率，但key 值不能相同；key值相同时，用index做区别-->
+		<li v-for="item of list" :key="item">#{{item}}</li>
+	</ul>
+	<ul>
+		<li v-for="(item, index) of list" :key="index">&{{item}}</li>
+	</ul>
+</div>
+
+<script type="text/javascript">
+	new Vue({
+		el: "#root",
+		data: {
+           show: true,
+           list: [1, 2, 3, 4]
+		},
+		methods: {
+           handleClick: function(){
+           	 this.show= !this.show;
+           }
+		}
+	})
+</script>
+</body>
+</html>

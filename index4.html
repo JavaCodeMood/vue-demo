@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vue-计算属性和监听器</title>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="root">
+	姓：<input type="text" name="firstName" v-model="firstName" />
+	名：<input type="text" name="lastName" v-model="lastName" />
+
+	<div><h1 style="color:red;">您好！{{firstName}}{{lastName}},欢迎你来到Vue世界！</h1></div>
+
+	<div><h1 style="color:green;">您好！{{fullName}},欢迎你来到Vue世界！</h1></div>
+
+	<div style="color: blue; font-size: 40px;">计数器：{{count}}</div>
+</div>
+
+<script type="text/javascript">
+	new Vue({
+		el: "#root",   //挂载点
+		data: {   //数据
+			firstName: '',
+			lastName: '',
+			count: 0
+		},
+		computed: {    //计算属性
+			fullName : function(){
+				return this.firstName + ' ' + this.lastName
+			}
+		},
+		watch: {   //监听器
+			firstName : function(){
+				this.count++
+			},
+            lastName : function(){
+            	this.count++
+            }
+		}
+
+	})
+</script>
+</body>
+</html>

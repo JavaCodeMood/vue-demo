@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vue-监听器</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+	<input v-model="str1" />
+	<br>
+	<input v-model="str2" />
+	<br>
+	<input v-model="str3" />
+	<br>
+    {{ fullStr }}
+</div>
+
+<script type="text/javascript">
+	var vm = new Vue({
+		el: "#app",
+		data: {
+			str1: '天国虽美',
+			str2: '没有了你',
+			str3: '万杯觥筹只不过是提醒寂寞罢了',
+			fullStr: '天国虽美,没有了你,万杯觥筹只不过是提醒寂寞罢了'
+		},
+		watch: {
+			str1: function(val){
+				this.fullStr = val + ',' + this.str2 + ',' + this.str3
+			},
+			str2: function(val){
+				this.fullStr = this.str1 + ',' + val + ',' + this.str3
+			},
+			str3: function(val){
+				this.fullStr = this.str1 + ',' + this.str2 + ',' + val
+			}			
+		}
+	})
+</script>
+</body>
+</html>

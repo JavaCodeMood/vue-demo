@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vue-自定义全局指令</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+	<p v-tack:left="[dynamicleft]">
+		曾经有一份美味的鸡腿，放在我面前，我没有好好珍惜，等别人吃完了，我才后悔莫及。如果再来一份，别人一定抢不过我。
+	</p>
+
+	<p v-tack:top="[dynamictop]">爱别离，怨长久，求不得， 放不下</p>
+</div>
+
+<script type="text/javascript">
+	//自定义全局指令 v-tack
+	Vue.directive('tack', {
+		//钩子函数
+	  bind(el, binding, vnode) {
+	    el.style.position = 'fixed';
+	    el.style.color = 'red';
+	    el.style.fontSize = '25px';
+	    el.style.boxShadow = '5px 10px 5px #00ff00';
+	    el.style.border = '4px solid #a1a1a1';
+	    const s = (binding.arg == 'left' ? 'left' : 'top');
+	    el.style[s] = binding.value + 'px';
+	  }
+	})
+
+	new Vue({
+		el: "#app",
+		data() {
+           return {
+           	  dynamicleft: 1200,
+           	  dynamictop: 500
+           }
+		}
+	})
+</script>
+</body>
+</html>

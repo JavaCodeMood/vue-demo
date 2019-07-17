@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>内联处理器中的方法</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<!-- v-on:在内联 JavaScript 语句中调用方法 -->
+<div id="app">
+	<button v-on:click="say('青青子衿')">上句： 青青子衿</button>
+	<button v-on:click="say('悠悠我心')">下句： 悠悠我心</button>
+</div>
+
+<script type="text/javascript">
+	new Vue({
+		el: "#app",
+		methods: {
+			say: function(message){
+				alert(message)
+			}
+		}
+	})
+</script>
+</body>
+</html>

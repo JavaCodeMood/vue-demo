@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vue自定义全局指令</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="app" v-demo:foo.a.b="message">
+	
+</div>
+
+<script type="text/javascript">
+	//自定义全局指令v-demo
+	Vue.directive('demo', {
+		//钩子函数
+		bind: function(el, binding, vnode){
+			var s = JSON.stringify
+			el.innerHTML = 
+			   'name: ' + s(binding.name) + '<br>' + 
+			   'value: ' + s(binding.value) + '<br>' + 
+			   'expression: ' + s(binding.expression) + '<br>' + 
+			   'arg: ' + s(binding.arg) + '<br>' + 
+			   'modifiers: ' + s(binding.modifiers) + '<br>' + 
+			   'vnode keys: ' + Object.keys(vnode).join(', ') 
+		}
+	})
+
+	new Vue({
+		el: "#app",
+		data: {
+			message: "一个人的寂寞两个人的错"
+		}
+	})
+
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vue</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+	{{msg}}
+    <br><br>
+	{{msg1}}
+</div>
+
+<script type="text/javascript">
+	var str = "abcdef"
+	var app = new Vue({
+		el: "#app",
+		data: {   //数据
+            msg: "Hello World",
+            message: "你好"
+		},
+		watch: {  //监听器
+           msg: function(newVal, oldVal){
+              console.log('newVal is： ' + newVal)
+              console.log('oldVal is: ' + oldVal)
+           }
+		},
+		computed: {  //计算属性
+           msg1: function(){
+              return 'computed: ' + this.msg + "," + this.message + "," + str
+           }
+		}
+	})
+</script>
+</body>
+</html>

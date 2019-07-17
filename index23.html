@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vue 事件处理方法</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<!--v-on 可以接收一个需要调用的方法名称。-->
+<div id="example">
+	<button v-on:click="green">Green</button>
+</div>
+
+<script type="text/javascript">
+	var vm = new Vue({
+		el: "#example",
+		data: {
+			name: 'vue.js'
+		},
+		//在methods对象中定义方法
+		methods: {
+			green: function(event){
+				//this在方法里指向当前vue实例
+				alert('Hello ' + this.name)
+				//even 是原生dom事件
+				if(event){
+					alert(event.target.tagName)
+				}
+			}
+		}
+	})
+</script>
+</body>
+</html>

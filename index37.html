@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vue事件</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+	<button v-on:click="counter1 += 1" 
+	        v-bind:style="{color: color, fontSize: fontSize + 'px', width: width + 'px', height: height + 'px'}">
+	    {{counter1}}
+    </button> 
+    + 
+	<button v-on:click="counter2 += 1"
+	        v-bind:style="{color: color, fontSize: fontSize + 'px', width: width + 'px', height: height + 'px'}">
+	    {{counter2}}
+	</button>
+	= 
+	<span style="color: green; font-size: 25px;">{{counter1+counter2}}</span>
+</div>
+
+<script type="text/javascript">
+	new Vue({
+		el: "#app",
+		data: {
+			counter1: 0,
+			counter2: 0,
+			color: '#00ff00',
+			fontSize: 25,
+			width:100,
+			height: 30
+		}
+	})
+</script>
+</body>
+</html>

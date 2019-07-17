@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>v-model用法</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+	<!-- v-model绑定文本值 -->
+	<input v-model="username" placeholder="请输入用户名">
+	<p>您的用户名为： {{username}}</p>
+    <br>
+
+    <!-- v-model绑定多行文本值 -->
+    <textarea v-model="message" placeholder="请输入您的座右铭"></textarea>
+    <span>您的座右铭：</span><br>
+    <p style="white-space: pre-wrap;">{{message}}</p>
+    <br>
+
+    <!-- v-model绑定单个复选框,绑定到布尔值 -->
+    <input type="checkbox" id="checkbox" v-model="checked">
+    <label for="checkbox">{{checked}}</label>
+    <br>
+
+    <!-- v-model绑定多个复选框，绑定到同一个数组 -->
+    <p>请选择你的爱好：</p>
+    <input type="checkbox" id="music" value="音乐" v-model="checkedNames">
+    <label for="music">音乐</label>
+    <input type="checkbox" id="movie" value="电影" v-model="checkedNames">
+    <label for="movie">电影</label>
+    <input type="checkbox" id="swimming" value="游泳" v-model="checkedNames">
+    <label for="swimming">游泳</label>
+    <input type="checkbox" id="travel" value="旅行" v-model="checkedNames">
+    <label for="travel">旅行</label>
+    <br>
+    <span>您的爱好是： {{checkedNames}}</span>
+    <br>
+
+    <!-- v-model绑定单选按钮 -->
+    <p>请选择您的性别：</p>
+    <input type="radio" id="male" value="男" v-model="sex">
+    <label for="male">男</label>
+    <input type="radio" id="female" value="女" v-model="sex">
+    <label for="female">女</label>
+    <br>
+    <span>您的性别是： {{sex}}</span>
+    <br>
+
+    <!-- v-model绑定单选选择框 -->
+    <p>请选择您的出生地：</p>
+    <select v-model="country">
+    	<option disabled="disabled" value="">请选择</option>
+    	<option>中国</option>
+    	<option>美国</option>
+    	<option>俄罗斯</option>
+    	<option>日本</option>
+    	<option>法国</option>
+    	<option>英国</option>
+    </select>
+    <br>
+    <span>您的出生地是： {{country}}</span>
+    <br>
+
+    <!-- v-model绑定多项选择框，绑定到一个数组 -->
+     <p>请选择您最喜欢的城市：</p>
+    <select v-model="citys" multiple style="width: 100px;">
+    	<option>北京</option>
+    	<option>上海</option>
+    	<option>深圳</option>
+    	<option>纽约</option>
+    	<option>东京</option>
+    	<option>柏林</option>
+    </select>
+    <br>
+    <span>您最喜欢的城市是： {{citys}}</span>
+    <br>
+
+    <!-- v-model绑定选择框，并用v-for渲染动态选项 -->
+    <p>看作者学诗词：</p>
+    <select v-model="poetryDemo">
+    	<option v-for="poetry in poetries" v-bind:value="poetry.value">
+    		{{poetry.text}}
+    	</option>
+    </select>
+    <span>诗词： {{poetryDemo}}</span>
+    <br>
+    <br>
+
+    <!-- 当选中时，`picked` 为字符串 "a" -->
+	<input type="radio" v-model="picked" value="abc">
+
+	<!-- `toggle` 为 true 或 false -->
+	<input type="checkbox" v-model="toggle">
+
+	<!-- 当选中第一个选项时，`selected` 为字符串 "abc" -->
+	<select v-model="selectStr">
+	   <option value="abc">ABC</option>
+	</select>
+	<br><br>
+
+	<!-- v-model绑定复选框
+        // 当选中时
+		toggle1 === 'yes'
+		// 当没有选中时
+		toggle1 === 'no'
+	-->
+	<input type="checkbox" v-model="toggle1" true-value="yes" false-value="no">
+    <br><br>
+
+    <!-- v-model绑定单选按钮 当选中时，pick === abc -->
+    <input type="radio" v-model="pick" v-bind:value="abc">
+    <br><br>
+
+    <!-- v-model绑定选择框的选项 
+     当选中时，typeof num => 'object'
+                     num.number => 12345
+    -->
+    <select v-model="num">
+    	<!--内联对象字面量-->
+    	<option v-bind:value="{number:12345}">12345</option>
+    </select>
+
+    <!-- v-model使用修饰符 -->
+    <p>一句话证明自己</p>
+    <input v-model.lazy="msg1"><br>
+    <span>你说的是：{{msg1}}</span>
+    <br>
+
+    <p>请输入您的年龄：</p>
+    <input type="number" v-model.number="age"><br>
+    <span> 您的年龄是：{{age}}</span>
+    <br>
+
+    <p>请输入一段文本信息：</p>
+    <input v-model.trim="msg2"><br>
+    <span>文本信息： {{msg2}}</span>
+</div>
+
+<script type="text/javascript">
+	new Vue({
+		el: "#app",
+		data: {
+			username: '',
+			message: '',
+			checked: true,
+			checkedNames: [],
+			sex: '',
+			country: '',
+			citys: [],
+			poetryDemo: '岑夫子，丹丘生，将进酒，杯莫停。',
+			poetries: [
+                {text: '李白', value: '岑夫子，丹丘生，将进酒，杯莫停。'},
+                {text: '苏轼', value: '不思量。自难忘。千里孤坟，无处话凄凉。'},
+                {text: '李煜', value: '剪不断，理还乱，是离愁，别是一般滋味在心头。'},
+                {text: '佚名', value: '不信抬头看，苍天绕过谁'}
+			],
+			picked: '',
+			toggle: true,
+			selectStr: '',
+			toggle1: '',
+			pick: '',
+			num: '',
+			msg1: '',
+			age: '',
+			msg2: ''
+		}
+	})
+</script>
+</body>
+</html>

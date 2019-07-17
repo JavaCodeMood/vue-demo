@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>vue—— v-for</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+	<style type="text/css">
+		body{ 
+		   background-image:url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556454823853&di=cec793e47dbba9812c81bd2bc6938bbb&imgtype=0&src=http%3A%2F%2Ftxt39-2.book118.com%2F2018%2F0516%2Fbook166641%2F166640410.jpg);
+		   background-repeat:no-repeat;
+		   background-origin:content-box;
+           background-size: cover;
+		}
+
+	</style>
+</head>
+<body>
+<div id="app">
+	<ul>
+		<li v-for="(item,index) in items" v-bind:style="{color: activeColor, fontSize: fontSize + 'px'}">
+			{{parentMessage}} - {{index}} - {{item.message}}
+		</li>
+	</ul>
+</div>
+
+<script type="text/javascript">
+	new Vue({
+		el: "#app",
+		data: {
+			parentMessage: '雨霖铃-柳永',
+			items: [
+                {message: '寒蝉凄切，对长亭晚，骤雨初歇。都门帐饮无绪，留恋处，兰舟催发。'},
+				{message: '执手相看泪眼，竟无语凝噎。念去去，千里烟波，暮霭沉沉楚天阔。'},
+				{message: '多情自古伤离别，更那堪，冷落清秋节！今宵酒醒何处？杨柳岸，晓风残月。'},
+				{message: '此去经年，应是良辰好景虚设。便纵有千种风情，更与何人说？'}
+			],
+			activeColor: 'pink',
+            fontSize: 30
+		}
+	})
+</script>
+</body>
+</html>

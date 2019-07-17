@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vue入门</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="root">{{msg}}</div>
+
+<script type="text/javascript">
+	/*创建vue实例*/
+	new Vue({
+		el: "#root",   /*el 绑定dom*/
+        data: {        /*数据绑定*/
+        	msg: "Hello World"
+        }
+	})
+</script>
+</body>
+</html>

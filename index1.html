@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vue入门</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+	<!--挂载点、模板、实例之间的关系-->
+	<!--挂载点内部的内容就是模板, 模板可以写到挂载点内部，也可以写到Vue实例内部-->
+<div id="root">
+	<!-- <h1>{{msg}}</h1> -->
+</div>
+
+<script type="text/javascript">
+	new Vue({
+		el: "#root",  /*el:标签后面的就是挂载点*/
+		template: '<h1 style="color:red;">{{msg}}</h1>',  /*模板，可以将挂载点内部的内容放到此处*/
+		data : {
+			msg: "Hello World"
+		}
+	})
+</script>
+</body>
+</html>

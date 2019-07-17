@@ -1,0 +1,578 @@
+指令 (Directives) 是带有 v- 前缀的特殊特性。指令特性的值预期是单个 JavaScript 表达式；
+指令的职责是，当表达式的值改变时，将其产生的连带影响，响应式地作用于 DOM。
+Vue指令总结如下：
+1. v-if: 如果，用于有条件性地渲染一块内容，这块内容只会在指令的表达式返回truthy值的时候被渲染；
+比如：<div v-if="show">hello world</div>
+
+v-else: 与v-if配套使用，使用v-else指令来表示v-if的“else块”，它必须紧跟在带v-if或者v-else-if的元素的后面，否则它将不会被识别。
+比如：
+<div v-if="Math.random() > 0.5">Now you see me</div>
+<div v-else>Now you don't</div>
+
+v-else-if: 充当v-if的“else-if块”，可以联系使用，它也必须紧跟在带v-if或者v-else-if的元素之后。
+比如：
+<div v-if="type === 'A'">A</div>
+<div v-else-if="type === 'B'">B</div>
+<div v-else-if="type === 'C'">C</div>
+<div v-else>Not A/B/C</div>
+
+2. v-show: 用于根据条件展示元素的内容，带有v-show的元素始终会被渲染并保留在DOM中，
+v-show只是简单地切换元素的CSS属性display,其属性值为none||block;
+v-show不支持<template>元素，也不支持v-else.
+比如：<h1 v-show="ok">Hello!</h1>
+
+v-if 与 v-show的区别：
+v-if 是“真正”的条件渲染，因为它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。
+v-if 也是惰性的：如果在初始渲染时条件为假，则什么也不做——直到条件第一次变为真时，才会开始渲染条件块。
+v-show 就简单得多——不管初始条件是什么，元素总是会被渲染，并且只是简单地基于 CSS 进行切换。
+一般来说，v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件很少改变，则使用 v-if 较好。
+
+3. v-bind: 绑定属性，用于响应式地更新HTML特性；
+比如：<div v-bind:title="title">Hello World</div>
+v-bind:class  绑定HTML Class,用于动态地切换class；
+比如：<div v-bind:class="{ active: isActive }"></div>
+v-bind:style  绑定内联样式，用于引入CSS样式渲染内容；CSS 属性名可以用驼峰式 (camelCase) 或短横线分隔 (kebab-case，记得用单引号括起来) 来命名
+比如：<div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }"></div>
+
+
+4. v-for: 用于循环列表，添加 :key 提升渲染效率/性能, 要求每一项循环的key 不一样, 也可用 :key="index", 
+如果对列表进行频繁的变更, 比如排序时, 使用 index 就不适合了
+比如：<li v-for="(item index) of list" :key="item">{{item}}</li>
+v-for=“item of list”，v-for表示循环list，依次输出item ，:key可以提升遍历效率，但key 值不能相同；key值相同时，用index做区别；
+通常情况下，不推荐同时使用v-if和v-for。当同时使用它们时，v-for 具有比 v-if 更高的优先级。
+
+v-for 指令根据一组数组的选项列表进行渲染。v-for 指令需要使用 item in items 形式的特殊语法，items 是源数据数组并且 item 是数组元素迭代的别名。
+
+
+5. v-text: 会直接输出html语句，会对模板数据进行转译
+比如：<h1 style="color:blue;" v-text="content"></h1>
+
+6. v-html: 不会输出html语句，不会对模板数据进行转译
+比如：<h1 style="color:green;" v-html="content"></h1>
+
+7. v-model: 双向数据绑定，数据与页面的显示会同时变化；
+比如：<input type="text" v-model="content">
+使用v-model指令在表单 <input>、<textarea> 及 <select> 元素上创建双向数据绑定。它会根据控件类型自动选取正确的方法来更新元素。
+它负责监听用户的输入事件以更新数据，并对一些极端场景进行一些特殊处理。
+v-model 会忽略所有表单元素的 value、checked、selected 特性的初始值而总是将 Vue 实例的数据作为数据来源。
+你应该通过 JavaScript 在组件的 data 选项中声明其初始值。
+
+v-model 在内部使用不同的属性为不同的输入元素并抛出不同的事件：
+text 和 textarea 元素使用 value 属性和 input 事件；
+checkbox 和 radio 使用 checked 属性和 change 事件；
+select 字段将 value 作为 prop 并将 change 作为事件。
+
+在文本区域插值 (<textarea>{{text}}</textarea>) 并不会生效，应用 v-model 来代替。
+如果 v-model 表达式的初始值未能匹配任何选项，<select> 元素将被渲染为“未选中”状态。
+对于单选按钮，复选框及选择框的选项，v-model 绑定的值通常是静态字符串 (对于复选框也可以是布尔值)
+
+v-model数据绑定修饰符：
+(1) .lazy : 在默认情况下，v-model 在每次 input 事件触发后将输入框的值与数据进行同步 。
+你可以添加 lazy 修饰符，从而转变为使用 change 事件进行同步。
+比如：
+<!-- 在“change”时而非“input”时更新 -->
+<input v-model.lazy="msg" >
+
+(2) .number : 给v-model添加.number修饰符，将用户的输入值自动转化为数值类型
+比如： <input v-model.number="age" type="number">
+
+(3) .trim : 给v-model添加.trim修饰符，可以自动过滤用户输入的首位空白字符。
+比如：<input v-model.trim="msg">
+
+
+8. v-on: 绑定事件，用于监听DOM事件，在触发的时候运行一些JavaScript代码；简化写法：@
+比如：<button v-on:click="handleClick">toggle</button>
+上面的代码等价于：<button @click="handleClick">toggle</button>
+Vue.js 为 v-on 提供了事件修饰符,按键修饰符,系统修饰键,鼠标按钮修饰符等。
+修饰符是由点开头的指令后缀来表示的。
+（1）事件修饰符如下：
+.stop
+.prevent
+.capture
+.self
+.once
+.passive
+.once
+.passive
+
+用法及作用如下：
+<!-- 阻止单击事件继续传播 -->
+<a v-on:click.stop="doThis"></a>
+
+<!-- 提交事件不再重载页面 -->
+<form v-on:submit.prevent="onSubmit"></form>
+
+<!-- 修饰符可以串联 -->
+<a v-on:click.stop.prevent="doThat"></a>
+
+<!-- 只有修饰符 -->
+<form v-on:submit.prevent></form>
+
+<!-- 添加事件监听器时使用事件捕获模式 -->
+<!-- 即元素自身触发的事件先在此处理，然后才交由内部元素进行处理 -->
+<div v-on:click.capture="doThis">...</div>
+
+<!-- 只当在 event.target 是当前元素自身时触发处理函数 -->
+<!-- 即事件不是从内部元素触发的 -->
+<div v-on:click.self="doThat">...</div>
+
+<!-- 点击事件将只会触发一次 -->
+<a v-on:click.once="doThis"></a>
+.once 修饰符还能被用到自定义的组件事件上。
+
+Vue 还对应 addEventListener 中的 passive 选项提供了 .passive 修饰符。
+<!-- 滚动事件的默认行为 (即滚动行为) 将会立即触发 -->
+<!-- 而不会等待 `onScroll` 完成  -->
+<!-- 这其中包含 `event.preventDefault()` 的情况 -->
+<div v-on:scroll.passive="onScroll">...</div>
+这个 .passive 修饰符尤其能够提升移动端的性能。
+
+使用修饰符时，顺序很重要；相应的代码会以同样的顺序产生。
+因此，用 v-on:click.prevent.self 会阻止所有的点击，
+而 v-on:click.self.prevent 只会阻止对元素自身的点击。
+
+事件修饰符.passive 和 .prevent 不能同时使用，因为 .prevent 将会被忽略，同时浏览器可能会向你展示一个警告。
+请记住，.passive 会告诉浏览器你不想阻止事件的默认行为。
+
+（2）按键修饰符
+在监听键盘事件时，我们经常需要检查详细的按键。Vue 允许为 v-on 在监听键盘事件时添加按键修饰符：
+比如：
+<!-- 只有在 `key` 是 `Enter` 时调用 `vm.submit()` -->
+<input v-on:keyup.enter="submit">
+你可以直接将 KeyboardEvent.key 暴露的任意有效按键名转换为 kebab-case 来作为修饰符。
+
+<input v-on:keyup.page-down="onPageDown">
+在上述示例中，处理函数只会在 $event.key 等于 PageDown 时被调用。
+
+按键码KeyCode的事件用法虽然已被废弃，但是在Vue中使用KeyCode特性也是可以的，为了在必要的情况下支持旧浏览器，Vue 提供了绝大多数常用的按键码的别名，如下：
+.enter
+.tab
+.delete (捕获“删除”和“退格”键)
+.esc
+.space
+.up
+.down
+.left
+.right
+
+另外我们可以通过全局config.keyCodes对象自定义按键修饰符别名，如下：
+// 可以使用 `v-on:keyup.f1`
+Vue.config.keyCodes.f1 = 112
+
+（3）系统修饰键
+Vue为我们提供了如下系统修饰键，来实现仅在按下相应按键时才触发鼠标或键盘事件的监听器。
+.ctrl
+.alt
+.shift
+.meta
+.exact
+
+用法如下：
+<!-- Alt + C -->
+<input @keyup.alt.67="clear">
+
+<!-- Ctrl + Click -->
+<div @click.ctrl="doSomething">Do something</div>
+
+.exact 修饰符允许你控制由精确的系统修饰符组合触发的事件。
+<!-- 即使 Alt 或 Shift 被一同按下时也会触发 -->
+<button @click.ctrl="onClick">A</button>
+
+<!-- 有且只有 Ctrl 被按下的时候才触发 -->
+<button @click.ctrl.exact="onCtrlClick">A</button>
+
+<!-- 没有任何系统修饰符被按下的时候才触发 -->
+<button @click.exact="onClick">A</button>
+
+请注意修饰键与常规按键不同，在和 keyup 事件一起用时，事件触发时修饰键必须处于按下状态。
+换句话说，只有在按住 ctrl 的情况下释放其它按键，才能触发 keyup.ctrl。而单单释放 ctrl 也不会触发事件。
+如果你想要这样的行为，请为 ctrl 换用 keyCode：keyup.17。
+
+（4）鼠标按钮修饰符
+鼠标按钮修饰符限制处理函数仅响应特定的鼠标按钮，具体如下：
+.left
+.right
+.middle
+
+9.自定义指令
+在 Vue2.0 中，代码复用和抽象的主要形式是组件。有时候，你仍然需要对普通 DOM 元素进行底层操作，这时候就会用到自定义指令。
+(1)自定义全局指令，语法如下：
+Vue.directive('指令名', {
+	//钩子函数
+})
+比如：
+// 注册一个全局自定义指令 `v-focus`
+Vue.directive('focus', {
+  // 当被绑定的元素插入到 DOM 中时……
+  inserted: function (el) {
+    // 聚焦元素
+    el.focus()
+  }
+})
+
+(2)自定义局部指令
+在new Vue()实例内部，定义如下：
+directives: {
+	指令名: {
+	   //指令的定义
+	}
+}
+比如：
+directives: {
+  focus: {
+    // 指令的定义
+    inserted: function (el) {
+      el.focus()
+    }
+  }
+}
+
+在自定义指令的时候，需要用到指令钩子函数。具体可选的钩子函数如下：
+(1)bind: 只调用一次，用于进行一次性的初始化设置，当指令第一次绑定到元素时调用。
+(2)inserted: 被绑定元素插入父节点时调用 (仅保证父节点存在，但不一定已被插入文档中)。
+(3)update: 所在组件的 VNode 更新时调用，但是可能发生在其子 VNode 更新之前。指令的值可能发生了改变，也可能没有。
+(4)componentUpdated：指令所在组件的 VNode 及其子 VNode 全部更新后调用。
+(5)unbind：只调用一次，指令与元素解绑时调用。
+
+指令钩子函数的参数：
+(1)el：指令所绑定的元素，可以用来直接操作 DOM 。
+(2)binding：一个对象，包含以下属性：
+	name：指令名，不包括 v- 前缀。
+	value：指令的绑定值，例如：v-my-directive="1 + 1" 中，绑定值为 2。
+	oldValue：指令绑定的前一个值，仅在 update 和 componentUpdated 钩子中可用。无论值是否改变都可用。
+	expression：字符串形式的指令表达式。例如 v-my-directive="1 + 1" 中，表达式为 "1 + 1"。
+	arg：传给指令的参数，可选。例如 v-my-directive:foo 中，参数为 "foo"。
+	modifiers：一个包含修饰符的对象。例如：v-my-directive.foo.bar 中，修饰符对象为 { foo: true, bar: true }。
+(3)vnode：Vue 编译生成的虚拟节点。移步 VNode API 来了解更多详情。
+(4)oldVnode：上一个虚拟节点，仅在 update 和 componentUpdated 钩子中可用。
+
+
+
+
+==================================================================================================================================
+Vue组件:
+一个Vue项目是由很多个组件构成的。
+Vue组件分为全局组件和局部组件。
+组件是可以复用的Vue实例，且带有一个名字，它与new Vue({})接收相同的选项，比如data,computed,watch,methods以及生命周期钩子等，除了el。
+组件可以复用，每个相同的组件相互独立，各自独立维护自己的数据，你每用一次组件，就会有一个它的新实例被创建。
+一个组件的data选项必须是一个函数，每个实例可以维护一份被返回对象的独立的拷贝。
+
+通常一个应用会以一棵嵌套的组件树的形式来组织。
+为了能在模板中使用，这些组件必须先注册以便Vue能够识别。
+在注册一个组件的时候，必须给组件一个名字；
+
+全局组件：
+通过Vue.component定义的组件是全局组件, 可以在任何地方使用
+Vue.component('todo-item', {
+    props: ['content'], //这个组件接收从外部传进来的叫 content的属性
+     template: '<li>{{content}}</li>'
+ });
+全局组件的组件名，就是Vue.component的第一个参数。
+定义全局组件名的方式有两种：
+第一种：Vue.component('my-component-name', { /* ... */ })  组件名使用短横线-进行连接；
+第二种：Vue.component('MyComponentName', { /* ... */ })   组件名首字母大写；
+
+子组件通过props选项来接收父组件传递的参数，比如：
+Vue.component('blog-post', {
+  props: ['title'],
+  template: '<h3>{{ title }}</h3>'
+})
+
+记住：全局注册的行为必须在根 Vue 实例 (通过 new Vue) 创建之前发生。
+全局组件在注册之后可以用在任何新创建的 Vue 根实例 (new Vue) 的模板中。
+
+
+局部组件：必须在new Vue()内通过components注册声明
+var TodoItem = { template: '<li>item</li>' }
+new Vue({
+    el: '#root',
+    data: {
+        list: []
+    },
+    components: { 'todo-item': TodoItem } //注册局部组件
+});
+
+对于 components 对象中的每个属性来说，其属性名就是自定义元素的名字，其属性值就是这个组件的选项对象。
+
+注意：局部注册的组件不能在子组件中使用；
+如果你希望局部组件ComponentA在子组件ComponentB中可以用，你可以这样写：
+var ComponentA = { /* ... */ }
+
+var ComponentB = {
+  components: {
+    'component-a': ComponentA
+  },
+  // ...
+}
+
+组件属性——props
+在这里以下面的组件为例：
+Vue.component('blog-post', {
+  props: ['postTitle'],
+  template: '<h3>{{ postTitle }}</h3>'
+})
+
+使用组件：
+<blog-post post-title="hello!"></blog-post>
+
+一个组件默认可以拥有任意数量的 prop，任何值都可以传递给任何 prop。
+通常情况下，prop是以字符串数组的形式列出的，如下：
+props: ['title', 'likes', 'isPublished', 'commentIds', 'author']
+我们也可以以对象形式列出prop，如下：
+props: {
+  title: String,
+  likes: Number,
+  isPublished: Boolean,
+  commentIds: Array,
+  author: Object,
+  callback: Function,
+  contactsPromise: Promise // or any other constructor
+}
+
+给prop赋值：
+(1)给prop传入一个静态值：
+<blog-post title="Vue.js的点点滴滴"></blog-post>
+
+(2)给prop传入一个变量的值
+<blog-post v-bind:title="post.title"></blog-post>
+
+(3)给prop传入一个复杂的表达式
+<blog-post v-bind:title="post.title + ' by ' + post.author.name"></blog-post>
+
+(4)给prop传入一个数字
+<!-- 即便 `42` 是静态的，我们仍然需要 `v-bind` 来告诉 Vue -->
+<!-- 这是一个 JavaScript 表达式而不是一个字符串。-->
+<blog-post v-bind:likes="42"></blog-post>
+
+<!-- 用一个变量进行动态赋值。-->
+<blog-post v-bind:likes="post.likes"></blog-post>
+
+(5)给prop传入一个布尔值
+<!-- 包含该 prop 没有值的情况在内，都意味着 `true`。-->
+<blog-post is-published></blog-post>
+
+<!-- 即便 `false` 是静态的，我们仍然需要 `v-bind` 来告诉 Vue -->
+<!-- 这是一个 JavaScript 表达式而不是一个字符串。-->
+<blog-post v-bind:is-published="false"></blog-post>
+
+<!-- 用一个变量进行动态赋值。-->
+<blog-post v-bind:is-published="post.isPublished"></blog-post>
+
+(6)给prop传入一个数组
+<!-- 即便数组是静态的，我们仍然需要 `v-bind` 来告诉 Vue -->
+<!-- 这是一个 JavaScript 表达式而不是一个字符串。-->
+<blog-post v-bind:comment-ids="[234, 266, 273]"></blog-post>
+
+<!-- 用一个变量进行动态赋值。-->
+<blog-post v-bind:comment-ids="post.commentIds"></blog-post>
+
+(7)给prop传入一个对象
+<!-- 即便对象是静态的，我们仍然需要 `v-bind` 来告诉 Vue -->
+<!-- 这是一个 JavaScript 表达式而不是一个字符串。-->
+<blog-post
+  v-bind:author="{
+    name: '刘豆豆',
+    company: '云天之上科技有限公司'
+  }"
+></blog-post>
+
+<!-- 用一个变量进行动态赋值。-->
+<blog-post v-bind:author="post.author"></blog-post>
+
+(8)给prop传入一个对象的所有属性
+我们可以通过不带参数的v-bind指令将一个对象的所有属性传给prop
+比如：对象user包含如下信息：
+user: {
+	id: 1,
+	name: "刘豆豆",
+	sex: "男",
+	age: 18,
+	content: "天国虽美，没有了你，万杯觥筹只不过是提醒寂寞罢了"
+}
+
+直接传入：<blog-post v-bind="user"></blog-post>
+
+所有的 prop 都使得其父子 prop 之间形成了一个单向下行绑定，也就是父组件的 prop的更新会向下流动到子组件中，但是反过来则不行。
+换句话说：父组件与子组件之间的数组传输是单向的，只能是父组件传递给子组件，当父组件的prop更新时，子组件中所有的prop都会被刷新为最新的值。
+
+注意在 JavaScript 中对象和数组是通过引用传入的，所以对于一个数组或对象类型的 prop 来说，在子组件中改变这个对象或数组本身将会影响到父组件的状态。
+
+
+在实际的开发过程中，我们需要对props中的键值对进行验证，为了定制prop的验证方式，我们可以为props中的值提供一个带有验证需求的对象，而不是一个字符串数组，比如：
+Vue.component('my-component', {
+  props: {
+    // 基础的类型检查 (`null` 和 `undefined` 会通过任何类型验证)
+    propA: Number,
+    // 多个可能的类型
+    propB: [String, Number],
+    // 必填的字符串
+    propC: {
+      type: String,
+      required: true
+    },
+    // 带有默认值的数字
+    propD: {
+      type: Number,
+      default: 100
+    },
+    // 带有默认值的对象
+    propE: {
+      type: Object,
+      // 对象或数组默认值必须从一个工厂函数获取
+      default: function () {
+        return { message: 'hello' }
+      }
+    },
+    // 自定义验证函数
+    propF: {
+      validator: function (value) {
+        // 这个值必须匹配下列字符串中的一个
+        return ['success', 'warning', 'danger'].indexOf(value) !== -1
+      }
+    }
+  }
+})
+如果验证失败，会在控制台给出警告信息。
+
+prop中的type对应的类型有：String, Number, Boolean, Array, Object, Date, Function, Symbol, 也可以是一个自定义的构造函数，我们可以使用instanceof类进行检查确认。
+比如：
+//自定义构造函数
+function User(id, name){
+	this.id = id;
+	this.name = name;
+}
+
+//在组件中使用
+Vue.component('blog-post',{
+	props: {
+	   author: User
+	}
+})
+
+通常情况下，组件可以接受任意的特性，这些接受到的特性会被添加到这个组件的根元素上。为什么会这样呢？因为开发组件库的作者并不知道你会把这个组件用在什么场景下。一个非 prop 特性是指传向一个组件，但是该组件并没有相应 prop 定义的特性。
+比如说：
+在Bootstrap插件中使用<bootstrap-date-input>组件，而这个插件需要在其 <input> 上用到一个 data-date-picker 特性。我们可以将这个特性添加到你的组件实例上，如下：
+<bootstrap-date-input data-date-picker="activated"></bootstrap-date-input>
+这个 data-date-picker="activated" 特性就会自动添加到 <bootstrap-date-input> 的根元素上。
+
+在这里，如果你不希望组件的根元素继承特性，你可以在组件中设置inheritAttrs: false，来禁用特性继承。
+Vue.component('my-component', {
+  inheritAttrs: false,
+  // ...
+})
+
+注意 inheritAttrs: false 选项不会影响 style 和 class 的绑定。
+
+动态组件：
+在一个Vue项目中，会有很多个组件，我们可以使用v-bind:is特性来切换不同的组件，如下：
+<component v-bind:is="currentTabComponent"></component>
+每次切换组件的时候，Vue都会创建一个新的组件实例。
+通常情况下，我们更希望在组件实例第一次创建的时候，被及时缓存下来。为了解决这个问题，我们可以使用<keep-alive>元素将一个动态组件包裹起来，已达到缓存的目的。如下：
+<!-- 失活的组件将会被缓存！-->
+<keep-alive>
+  <component v-bind:is="currentTabComponent"></component>
+</keep-alive>
+全局组件和局部组件都可以使用<keep-alive>元素包裹，以达缓存目的。
+
+异步组件：
+在大型应用中，我们可能需要将应用分割成小一些的代码块，并且只在需要的时候才从服务器加载一个模块。为了简化，Vue 允许你以一个工厂函数的方式定义你的组件，这个工厂函数会异步解析你的组件定义。Vue 只有在这个组件需要被渲染的时候才会触发该工厂函数，且会把结果缓存起来供未来重渲染。
+比如：
+Vue.component('async-example', function (resolve, reject) {
+  setTimeout(function () {
+    // 向 `resolve` 回调传递组件定义
+    resolve({
+      template: '<div>I am async!</div>'
+    })
+  }, 1000)
+})
+这个工厂函数会收到一个 resolve 回调，这个回调函数会在你从服务器得到组件定义的时候被调用。
+
+一个推荐的做法是将异步组件和 webpack 的 code-splitting 功能一起配合使用：
+Vue.component('async-webpack-example', function (resolve) {
+  // 这个特殊的 `require` 语法将会告诉 webpack
+  // 自动将你的构建代码切割成多个包，这些包
+  // 会通过 Ajax 请求加载
+  require(['./my-async-component'], resolve)
+})
+
+你也可以在工厂函数中返回一个 Promise，所以把 webpack 2 和 ES2015 语法加在一起，我们可以写成这样：
+
+Vue.component(
+  'async-webpack-example',
+  // 这个 `import` 函数会返回一个 `Promise` 对象。
+  () => import('./my-async-component')
+)
+当使用局部注册的时候，你也可以直接提供一个返回 Promise 的函数：
+new Vue({
+  // ...
+  components: {
+    'my-component': () => import('./my-async-component')
+  }
+})
+
+在Vue的2.3.0+ 的版本中，这里的异步组件工厂函数也可以返回一个如下格式的对象：
+const AsyncComponent = () => ({
+  // 需要加载的组件 (应该是一个 `Promise` 对象)
+  component: import('./MyComponent.vue'),
+  // 异步组件加载时使用的组件
+  loading: LoadingComponent,
+  // 加载失败时使用的组件
+  error: ErrorComponent,
+  // 展示加载时组件的延时时间。默认值是 200 (毫秒)
+  delay: 200,
+  // 如果提供了超时时间且组件加载也超时了，
+  // 则使用加载失败时使用的组件。默认值是：`Infinity`
+  timeout: 3000
+})
+
+
+自定义组件的v-model
+一个组件上的 v-model 默认会利用名为 value 的 prop 和名为 input 的事件，但是像单选框、复选框等类型的输入控件可能会将 value 特性用于不同的目的。model 选项可以用来避免这样的冲突。如下：
+Vue.component('base-checkbox', {
+  model: {
+    prop: 'checked',
+    event: 'change'
+  },
+  props: {
+    checked: Boolean
+  },
+  template: `
+    <input
+      type="checkbox"
+      v-bind:checked="checked"
+      v-on:change="$emit('change', $event.target.checked)"
+    >
+  `
+})
+
+<base-checkbox v-model="lovingVue"></base-checkbox>
+这里的 lovingVue 的值将会传入这个名为 checked 的 prop。同时当 <base-checkbox> 触发一个 change 事件并附带一个新的值的时候，这个 lovingVue 的属性将会被更新。
+
+
+=====================================================================================================================================
+Vue事件
+在Vue.js中使用v-on指令（简写为@）来监听Dom事件，并在触发时运行一些JavaScript代码；
+通常的做法是，我们在new Vue()的methods属性中定义事件方法，然后通过v-on指令指定事件方法的名字来触发调用事件；
+除了直接使用v-on指令绑定一个方法，也可以在内联JavaScript语句中调用方法；
+
+自定义事件：
+在Vue.js中，事件名不同于组件和 prop，它不存在任何自动化的大小写转换，它也不会被用作一个 JavaScript 变量名或属性名。
+使用v-on指令事件监听器在DOM模板中会自动将大写的事件名转化为全小写的。
+
+在实际的开发过程中，我们可能需要在一个组件的根元素上直接监听一个原生事件，我们可以使用 v-on 的 .native 修饰符来实现，比如：
+<base-input v-on:focus.native="onFocus"></base-input>
+并不是在任何标签里使用v-on的.bative修饰符都会生效，当使用它来修饰一个<input>标签时，很有可能会失效。
+因为<input>标签可能会有父级标签，也就是说根元素不是<input>标签或者它修饰的组件被重构了，这就会导致父级的.native监听器将静默失败，它虽然失败了，但是也不会报错，只是你得不到预期的结果。
+为了解决这个问题，Vue提供了一个$listeners 属性，它是一个对象，里面包含了作用在这个组件上的所有监听器。
+比如：
+{
+  focus: function (event) { /* ... */ }
+  input: function (value) { /* ... */ },
+}
+有了这个 $listeners 属性，你就可以配合 v-on="$listeners" 将所有的事件监听器指向这个组件的某个特定的子元素。
+
+
+
+
+
+
