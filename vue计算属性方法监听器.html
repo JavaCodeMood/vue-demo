@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<title>Vue实例-计算属性,方法,监听器</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+   {{firstName + " " + lastName}}
+   <br>
+   {{fullName}} {{age}}岁
+   <br/>
+   {{fullName1()}} {{age}}岁
+   <br/>
+   {{fullName2}} {{age}}岁
+</div>
+
+<script type="text/javascript">
+   
+	/*创建vue实例*/
+	var vm = new Vue({
+		el: "#app",   /*el 绑定dom*/
+        data: {        /*数据绑定*/
+        	firstName: "Dell",
+            lastName: "Lee",
+            fullName2: "霜花 似雪",
+            age: 25
+        },
+        //方法
+        methods: {   /*事件绑定*/
+            fullName1: function(){
+                console.log("计算了一次");
+                return this.firstName + " " + this.lastName;
+            }
+        	
+        },
+        //计算属性
+        computed: {
+            fullName: function(){
+                console.log("计算了一次");
+               return this.firstName + " " + this.lastName;
+            }
+        },
+        //监听器
+        watch: {
+            //监听firstName的改变
+            firstName: function(){
+                console.log("监听器计算了一次");
+                this.fullName2 = this.firstName + " " + this.lastName;
+            },
+            //监听lastName的改变
+            lastName: function(){
+                console.log("监听器计算了一次");
+                this.fullName2 = this.firstName + " " + this.lastName;
+            }
+        }
+	})
+</script>
+</body>
+</html>

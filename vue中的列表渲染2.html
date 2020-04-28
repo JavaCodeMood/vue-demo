@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>vue中的列表渲染</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+	<div v-for="item of userInfo">
+		{{item}}
+	</div>
+
+	<br/>
+	<div v-for="(item, key, index) of userInfo">
+		{{index}} => {{key}} : {{item}}
+	</div>
+</div>
+
+<script type="text/javascript">
+	// push 添加列表元素
+	// pop 删除列表元素
+	// sort 对数组排序
+	// splice 截取
+	// reverse 取反
+
+	//修改引用地址，才能改变其值
+	var vm = new Vue({
+		el: "#app",
+		data: {
+			userInfo: {
+				name: "霜花似雪",
+				age: 25,
+				gender: "male",
+				salary: "secret",
+				address: "深圳",
+				phone: "12895514444"
+			}
+			
+		}
+
+	})
+</script>
+</body>
+</html>

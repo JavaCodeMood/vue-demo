@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vue实例</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <div v-on:click="handleClick">{{message}}</div>
+    <item></item>
+</div>
+
+<script type="text/javascript">
+    //定义全局组件
+    Vue.component('item', {    //组件名称
+        template: '<div>Hello World</div>'   //组件内容模板
+    })
+   
+	/*创建vue实例*/
+	var app = new Vue({
+		el: "#app",   /*el 绑定dom*/
+        data: {        /*数据绑定*/
+        	message: "Hello World"
+        },
+        methods: {   /*事件绑定*/
+        	handleClick: function(){
+        		alert("Hello World")
+        	}
+        }
+	})
+</script>
+</body>
+</html>

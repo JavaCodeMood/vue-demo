@@ -5,9 +5,18 @@
 	<script type="text/javascript" src="./vue.js"></script>
 </head>
 <body>
-<div id="root">{{msg}}</div>
-
+<div id="app"></div>
 <script type="text/javascript">
+	var dom = document.getElementById('app')
+	dom.innerHTML = '你好！vue.js';
+	setTimeout(function(){
+		dom.innerHTML = "拜拜，vue.js";
+	}, 2000)
+</script>
+
+<div id="root">{{msg}}</div>
+<script type="text/javascript">
+	<!--MVVM模式-->
 	/*创建vue实例*/
 	new Vue({
 		el: "#root",   /*el 绑定dom*/
@@ -15,6 +24,11 @@
         	msg: "Hello World"
         }
 	})
+
+	setTimeout(function(){
+		root.$data.msg = "bye world"
+
+	}, 2000)
 </script>
 </body>
 </html>

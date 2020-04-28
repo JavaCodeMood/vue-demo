@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vue入门</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+	<input type="text" name="name" v-model="inputValue" />
+	<button v-on:click="handleBtnClick">提交</button>
+    <ul>
+    	<li v-for="item in list">{{item}}</li>
+    </ul>
+</div>
+
+<script type="text/javascript">
+	/*创建vue实例*/
+	var app = new Vue({
+		el: "#app",   /*el 绑定dom*/
+        data: {        /*数据绑定*/
+        	list: [],
+        	inputValue: ''
+        },
+        methods: {
+        	handleBtnClick: function(){
+        		this.list.push(this.inputValue)   //向list中添加元素
+        		this.inputValue = ''  //清空
+        	}
+        }
+	})
+</script>
+</body>
+</html>

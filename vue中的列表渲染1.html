@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>vue中的列表渲染</title>
+	<script type="text/javascript" src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+	<template v-for="(item, index) in list" :key="item.id">
+		<div>
+		     {{item.id}} : {{item.text}}
+	    </div>
+	    <span v-for="(item, index) of list" :key="item.id">
+	    	{{item.text}}
+	    </span>
+	</template>
+</div>
+
+<script type="text/javascript">
+	// push 添加列表元素
+	// pop 删除列表元素
+	// sort 对数组排序
+	// splice 截取
+	// reverse 取反
+	var vm = new Vue({
+		el: "#app",
+		data: {
+			list: [{
+				id: "00001234",
+				text: "天国虽美"
+			},{
+				id: "00001235",
+				text: "没有了你"
+			},{
+                id: "00001236",
+                text: "万杯觥筹"
+			},{
+				id: "00001237",
+				text: "只不过是提醒寂寞罢了"
+			}]
+			
+		}
+
+	})
+</script>
+</body>
+</html>
